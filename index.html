@@ -180,7 +180,7 @@
   .tilt { transform-style: preserve-3d; will-change: transform; }
 
   /* ---------- marcas ---------- */
-  .brands { border-bottom: 1px solid var(--line); overflow: hidden; padding: 30px 0 34px; background: var(--carbon); }
+  .brands { overflow: hidden; padding: 30px 0 74px; background: var(--carbon); }
   .brands__intro { text-align: center; color: var(--muted); margin-bottom: 24px; }
   .brands__viewport {
     overflow: hidden;
@@ -206,6 +206,21 @@
   /* ---------- sections ---------- */
   section.sec { padding: clamp(72px, 10vw, 128px) 0; }
   .sec--paper { background: var(--paper); color: var(--ink-dark); }
+
+  /* transição entre seções: painéis arredondados que deslizam sobre o anterior */
+  .panel {
+    position: relative;
+    margin-top: -40px;
+    border-radius: 40px 40px 0 0;
+    box-shadow: 0 -30px 60px -30px rgba(0, 0, 0, .55);
+  }
+  .panel--dark { background: linear-gradient(180deg, #17171a 0, var(--black) 320px); }
+  .panel--paper { background: linear-gradient(180deg, #f7f5f1 0, var(--paper) 280px); }
+  /* alça discreta no topo do painel, como uma aba */
+  .panel--dark::before, .panel--paper::before {
+    content: ""; position: absolute; top: 14px; left: 50%; width: 44px; height: 4px; border-radius: 4px;
+    transform: translateX(-50%); background: currentColor; opacity: .14;
+  }
   .sec__head { display: flex; justify-content: space-between; align-items: end; gap: 32px; margin-bottom: 48px; flex-wrap: wrap; }
   .sec__head .label { color: var(--red); margin-bottom: 14px; display: block; }
   .sec h2 { font-weight: 900; font-stretch: 118%; text-transform: uppercase; font-size: clamp(32px, 4.6vw, 60px); line-height: .95; letter-spacing: -.03em; max-width: 760px; }
@@ -235,8 +250,17 @@
   .service a:hover { color: var(--red); }
 
   /* como funciona */
-  .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; counter-reset: s; }
-  .step { position: relative; padding: 32px 28px; background: var(--carbon); border: 1px solid var(--line); border-radius: 6px; }
+  .steps { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; counter-reset: s; }
+  /* linha que liga os passos 01 → 02 → 03 */
+  .steps::before {
+    content: ""; position: absolute; left: 8%; right: 8%; top: 60px; height: 2px;
+    background: repeating-linear-gradient(90deg, rgba(227,38,43,.7) 0 10px, transparent 10px 18px);
+  }
+  .step { position: relative; padding: 32px 28px; background: var(--carbon); border: 1px solid var(--line); border-radius: 14px; }
+  .step:not(:last-child)::after {
+    content: "→"; position: absolute; top: 44px; right: -32px; width: 24px; height: 24px; border-radius: 50%;
+    display: grid; place-items: center; font-size: 13px; color: #fff; background: var(--red); z-index: 1;
+  }
   .step::before { counter-increment: s; content: "0" counter(s); display: block; font-weight: 900; font-stretch: 125%; font-size: 56px; line-height: 1; color: var(--red); margin-bottom: 28px; }
   .step h3 { font-size: 21px; font-weight: 800; margin-bottom: 10px; }
   .step p { color: var(--muted); font-size: 15px; }
@@ -317,8 +341,12 @@
   .wa-float:hover { transform: translateY(-3px); }
   .wa-float svg { width: 26px; height: 26px; }
 
-  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
-  .reveal.in { opacity: 1; transform: none; }
+  .reveal {
+    opacity: 0; transform: translateY(28px) scale(.985); filter: blur(6px);
+    transition: opacity .9s cubic-bezier(.2, .7, .2, 1), transform .9s cubic-bezier(.2, .7, .2, 1), filter .9s ease;
+    transition-delay: var(--d, 0ms);
+  }
+  .reveal.in { opacity: 1; transform: none; filter: none; }
 
   /* ---------- responsivo ---------- */
   @media (max-width: 960px) {
@@ -327,7 +355,13 @@
     .woofer { max-width: 420px; justify-self: center; margin-top: -8px; }
     .hero__bg::after { background: linear-gradient(0deg, var(--black) 8%, rgba(12,12,13,.82) 60%, rgba(12,12,13,.7) 100%); }
     .services { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .steps { grid-template-columns: minmax(0, 1fr); }
+    .steps { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+    .steps::before {
+      left: 50%; right: auto; top: 0; bottom: 0; width: 2px; height: auto;
+      background: repeating-linear-gradient(180deg, rgba(227,38,43,.7) 0 10px, transparent 10px 18px);
+    }
+    .step:not(:last-child)::after { top: auto; bottom: -28px; right: 50%; transform: translateX(50%) rotate(90deg); }
+    .panel { margin-top: -28px; border-radius: 28px 28px 0 0; }
     .reviews { grid-template-columns: minmax(0, 1fr); }
     .score { position: static; }
     .faq { grid-template-columns: minmax(0, 1fr); gap: 16px; }
@@ -351,7 +385,8 @@
     html { scroll-behavior: auto; }
     .speaker .cone { animation: none; }
     .brands__track { animation-duration: 60s; }
-    .reveal { opacity: 1; transform: none; transition: none; }
+    /* sem movimento: só um fade suave */
+    .reveal { transform: none; filter: none; transition: opacity 1s ease; transition-delay: var(--d, 0ms); }
   }
 </style>
 </head>
@@ -475,7 +510,7 @@
   </div>
 
   <!-- SERVIÇOS -->
-  <section class="sec sec--paper" id="servicos">
+  <section class="sec sec--paper panel panel--paper" id="servicos">
     <div class="wrap">
       <div class="sec__head reveal">
         <div>
@@ -538,7 +573,7 @@
   </section>
 
   <!-- COMO FUNCIONA -->
-  <section class="sec" id="como-funciona">
+  <section class="sec panel panel--dark" id="como-funciona">
     <div class="wrap">
       <div class="sec__head reveal">
         <div>
@@ -585,7 +620,7 @@
   </section>
 
   <!-- AVALIAÇÕES (reais, do Google) -->
-  <section class="sec sec--paper" id="avaliacoes">
+  <section class="sec sec--paper panel panel--paper" id="avaliacoes">
     <div class="wrap">
       <div class="sec__head reveal">
         <div>
@@ -627,7 +662,7 @@
   </section>
 
   <!-- FAQ -->
-  <section class="sec" id="duvidas">
+  <section class="sec panel panel--dark" id="duvidas">
     <div class="wrap faq">
       <div class="reveal">
         <span class="label" style="color:var(--red)">Dúvidas</span>
@@ -685,7 +720,7 @@
   </section>
 
   <!-- CTA FINAL -->
-  <section class="cta">
+  <section class="cta panel">
     <div class="wrap">
       <h2>Seu carro merece esse upgrade.</h2>
       <a class="btn btn--wa" data-wa="Olá! Vim pelo site e quero fazer um orçamento." href="#"><svg><use href="#wa"/></svg>Fazer orçamento agora</a>
@@ -768,6 +803,12 @@
   const io = new IntersectionObserver(entries => entries.forEach(e => {
     if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
   }), { threshold: .12 });
+  // cards em cascata: cada item de um grupo entra um pouco depois do anterior
+  document.querySelectorAll('.gallery figure').forEach(f => f.classList.add('reveal'));
+  document.querySelectorAll('.services, .steps, .quotes, .gallery, .stats').forEach(group => {
+    [...group.children].filter(el => el.classList.contains('reveal'))
+      .forEach((el, i) => el.style.setProperty('--d', `${i * 110}ms`));
+  });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
   document.getElementById('year').textContent = new Date().getFullYear();
