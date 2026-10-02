@@ -148,7 +148,7 @@
       linear-gradient(45deg, rgba(255,255,255,.025) 25%, transparent 25%, transparent 75%, rgba(255,255,255,.025) 75%);
     background-size: 6px 6px; background-position: 0 0, 3px 3px;
   }
-  .hero .wrap { position: relative; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 48px; align-items: center; padding-top: clamp(36px, 5vw, 64px); padding-bottom: clamp(48px, 6vw, 80px); }
+  .hero .wrap { position: relative; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); gap: 48px; align-items: center; padding-top: clamp(36px, 5vw, 64px); padding-bottom: clamp(48px, 6vw, 80px); }
   .rating-chip {
     display: inline-flex; align-items: center; gap: 10px; padding: 8px 14px 8px 10px;
     border: 1px solid var(--line); border-radius: 999px; font-size: 14px; color: var(--muted); margin-bottom: 28px;
@@ -162,8 +162,18 @@
   .hero h1 em { font-style: normal; color: var(--red); }
   .hero__lead { margin-top: 24px; max-width: 520px; font-size: 18px; color: var(--muted); }
   .hero__actions { display: flex; gap: 12px; margin-top: 36px; flex-wrap: wrap; }
-  .hero__meta { display: flex; gap: 28px; margin-top: 44px; padding-top: 24px; border-top: 1px solid var(--line); flex-wrap: wrap; }
-  .hero__meta div { display: flex; flex-direction: column; gap: 4px; }
+  .hero__meta { display: flex; gap: 36px; margin-top: 40px; max-width: 640px; padding-top: 24px; border-top: 1px solid var(--line); flex-wrap: wrap; }
+  .hero__meta > * { display: flex; flex-direction: column; gap: 4px; }
+  .hero__meta a:hover .label { color: var(--ink); }
+  .hero__meta .stars { font-size: 16px; vertical-align: 3px; margin-left: 4px; color: #fbbc04; letter-spacing: 1px; }
+  .brands-mini { display: flex; align-items: center; gap: 12px; height: 33px; }
+  .brands-mini img { width: 26px; height: 26px; filter: invert(1); }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 10px; margin-bottom: 26px;
+    padding: 8px 16px 8px 12px; border-radius: 999px; font-size: 13px; font-weight: 600; letter-spacing: .01em;
+    border: 1px solid rgba(227, 38, 43, .4); background: rgba(227, 38, 43, .1); color: var(--ink);
+  }
+  .eyebrow i { width: 8px; height: 8px; border-radius: 50%; background: var(--red); box-shadow: 0 0 0 4px rgba(227, 38, 43, .22); flex: none; }
   .hero__meta strong { font-size: 22px; font-stretch: 112%; font-weight: 800; }
   .hero__meta span { color: var(--muted); }
 
@@ -488,20 +498,28 @@
     <div class="hero__bg" aria-hidden="true"><img src="img/hero.jpg" alt="" id="heroBg"></div>
     <div class="wrap">
       <div>
-        <a href="#avaliacoes" class="rating-chip">
-          <span class="stars" aria-hidden="true">★★★★★</span>
-          <span><strong>4,8</strong> no Google · 77 avaliações</span>
-        </a>
-        <h1>Som, película e acessórios <em>no padrão</em> que seu carro merece.</h1>
-        <p class="hero__lead">Loja de som automotivo e insulfilm no Jardim Iae, em São Paulo. Instalação de som, multimídia, película, alarmes e travas — com o cuidado de quem atende do popular ao importado.</p>
+        <p class="eyebrow"><i aria-hidden="true"></i>Especialistas em som e proteção automotiva · Jardim Iae, SP</p>
+        <h1>Som e película automotiva com <em>padrão de importado.</em></h1>
+        <p class="hero__lead">Do Fiat Mobi ao Porsche 911: instalação com acabamento de fábrica, fiação escondida e um atendimento que explica cada detalhe — antes e depois do serviço.</p>
         <div class="hero__actions">
           <a class="btn btn--wa" data-wa="Olá! Vim pelo site e quero fazer um orçamento." href="#"><svg><use href="#wa"/></svg>Pedir orçamento no WhatsApp</a>
-          <a class="btn btn--line" href="#servicos">Ver serviços</a>
+          <a class="btn btn--line" href="#galeria">Ver trabalhos</a>
         </div>
         <div class="hero__meta">
-          <div><strong>4,8 ★</strong><span class="label">Nota no Google</span></div>
-          <div><strong>18,8 mil</strong><span class="label">Seguidores no Instagram</span></div>
-          <div><strong>Zona Sul</strong><span class="label">Jardim Iae · SP</span></div>
+          <a href="#avaliacoes">
+            <strong>4,8 <span class="stars" aria-label="5 estrelas">★★★★★</span></strong>
+            <span class="label">77 avaliações no Google</span>
+          </a>
+          <div>
+            <strong>18,8 mil</strong>
+            <span class="label">Seguidores no Instagram</span>
+          </div>
+          <div>
+            <strong class="brands-mini" aria-label="Porsche, BMW, Audi e Land Rover">
+              <img src="img/marcas/porsche.svg" alt=""><img src="img/marcas/bmw.svg" alt=""><img src="img/marcas/audi.svg" alt=""><img src="img/marcas/landrover.svg" alt="">
+            </strong>
+            <span class="label">Importados atendidos</span>
+          </div>
         </div>
       </div>
 
