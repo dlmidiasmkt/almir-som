@@ -331,7 +331,7 @@
   .visit__info dt { color: var(--muted); margin-bottom: 4px; }
   .visit__info dd { font-size: 18px; font-weight: 600; }
   .visit__actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: auto; }
-  .visit iframe { width: 100%; height: 100%; min-height: 420px; border: 0; filter: grayscale(1) invert(.92) contrast(.9); }
+  .visit iframe { width: 100%; height: 100%; min-height: 420px; border: 0; }
 
   /* CTA final */
   .cta { position: relative; overflow: hidden; background: var(--red); color: #fff; padding: clamp(72px, 10vw, 120px) 0; }
@@ -794,6 +794,12 @@
   const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   // Rolagem suave na página inteira + rolagem animada até a aba clicada
+  // O lead sempre começa no hero: ignora #secao no link e não restaura a rolagem anterior
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  scrollTo(0, 0);
+  addEventListener('load', () => scrollTo(0, 0));
+
   const topbar = document.querySelector('.topbar');
   const easeInOut = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   const lenis = typeof Lenis !== 'undefined' ? new Lenis({ lerp: 0.1, smoothWheel: true }) : null;
@@ -836,7 +842,6 @@
       e.preventDefault();
       if (target.hidden) return;
       goTo(target);
-      history.replaceState(null, '', a.getAttribute('href'));
     });
   });
 
